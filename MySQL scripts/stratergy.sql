@@ -1,10 +1,29 @@
 
-declare bill_identi int;
+declare bill_identi int(2);
+# initiate a order
 CALL SP_initiateCustomerBill(7777777777);
-set bill_identi (select max(bill_id) as use_this_id from shop_management_system.bill);
-call SP_addBillItems(8,1,20);
-call SP_addBillItems(8,2,1);
-call SP_customerPayment(8,'CASH');
+#get the order number quickly
+set bill_identi = (select max(bill_id) as use_this_id from shop_management_system.bill);
+#add items
+call SP_addBillItems(9,1,5);
+call SP_addBillItems(9,2,1);
+#when finished give ask payment details
+call SP_customerPayment(9,'CASH');
+
+
+
+declare purch_identi int;
+#initiate a purchase order
+CALL SP_supplierPayment(94543848239);
+#get the order number quickly
+set purch_identi = (select max(purchase_id) as use_this_id from shop_management_system.purchase);
+#add items
+call SP_addPurchaseItems(1,1,20);
+call SP_addPurchaseItems(1,2,1);
+#when finished give ask payment details
+call SP_supplierPayment(1,'CASH');
+
+
 
 select sum(price*quantity) from shop_management_system.bill_item where bill_id = 8;
 

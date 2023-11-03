@@ -6,6 +6,10 @@ values ("vicco tumeric",20,30,10)
 Insert into shop_management_system.customer (first_name,last_name,email_id,address,phone_number,city,state,post_code,start_date)
 values ("John","Deer","jd@hotmail.com","Oxford street 10 Block 2",94573848239,"Nashik","Maharashtra",534112,"2023-11-02 17:45:57.420")
 
+#Adding supplier
+Insert into shop_management_system.supplier (name,email_id,address,phone,city,state,post_code,initial_purchase_date)
+values ("BKT","BKT@gmail.com","block 45 hamington",94543848239,"Mumbai","Maharashtra",416225,"2023-11-03 17:45:57.420")
+
 #Adding a bill for John Deer (Probably need an Stored Procedure for finding the customer.)
 
 # Adding a Bill for Anonymous User Need an stored procedure for finding the total amount inncurred for the Bill
