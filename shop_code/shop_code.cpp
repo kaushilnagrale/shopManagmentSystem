@@ -154,7 +154,7 @@ string cart::get_bill_id()
 void cart::add_item()
 {
 	// printing your order ID is specific
-	// Loop to add items 
+	// Loop to add items  
 	//Logic to add the item with given quantity
 }
 
