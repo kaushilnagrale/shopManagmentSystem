@@ -57,6 +57,45 @@ public:
 	void payment();
 };
 
+class supplier_cart
+{
+
+	string mobile_number;			// Primary Key
+	string item_name;
+	long qty;
+
+public:
+	//void generate_bill_id();
+	//string get_bill_id();
+	//void add_item();
+	//void remove_item();
+	//void checkout();
+	//void payment();
+};
+
+class customer 
+{
+	string first_name;			// Primary Key
+	string last_name;
+	string email_id;
+	string address;
+	string phone_number;
+	string city;
+	string state;
+	string post_code;
+};
+
+class supplier
+{
+	string name;
+	string phone_number;
+	string address;
+	string city;
+	string state;
+	string post_code;
+	string email_id;
+};
+
 //Member Functions
 void items::add()
 {
