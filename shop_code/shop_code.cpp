@@ -41,7 +41,7 @@ public:
 	void item_search();
 };
 
-class cart
+class customer_cart
 {
 
 	string mobile_number;			// Primary Key
@@ -158,7 +158,7 @@ void items::item_search()
 }
 
 //Customer Cart member function
-void cart::generate_bill_id()
+void customer_cart::generate_bill_id()
 {
 	cout << "Enter your mobile number : ";
 	cin >> mobile_number;
@@ -177,7 +177,7 @@ void cart::generate_bill_id()
 	
 }
 
-string cart::get_bill_id() 
+string customer_cart::get_bill_id()
 {
 	stmt.str("");
 	stmt << "select max(bill_id) from bill";
@@ -190,25 +190,25 @@ string cart::get_bill_id()
 	return row[0];
 }
 
-void cart::add_item()
+void customer_cart::add_item()
 {
 	// printing your order ID is specific
 	// Loop to add items  
 	//Logic to add the item with given quantity
 }
 
-void cart::remove_item()
+void customer_cart::remove_item()
 {
 	// show all the order and option to remove the items from the order
 	//Logic to remove the item with given quantity
 }
 
-void cart::checkout()
+void customer_cart::checkout()
 {
 	//Finalised cart looped with SP to add items (add item Stored procedure)
 }
 
-void cart::payment()
+void customer_cart::payment()
 {
 	//Add payment method for the respective Bill
 }
@@ -295,7 +295,7 @@ void item_menu()
 {
 	int c;
 	items b;
-	cart car;
+	customer_cart car;
 	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
 	cout << "                  ITEM MENU" << endl;
 	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
