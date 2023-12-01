@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <mysql.h>
 #include <conio.h>
+#include <ctime>
 
 using namespace std;
 
@@ -65,12 +66,13 @@ class supplier_cart
 	long qty;
 
 public:
-	//void generate_bill_id();
-	//string get_bill_id();
+	//void generate_purchase_id();
+	//string get_purchase_id();
 	//void add_item();
 	//void remove_item();
 	//void checkout();
-	//void payment();
+	//void payment()
+
 };
 
 class customer 
@@ -83,6 +85,10 @@ class customer
 	string city;
 	string state;
 	string post_code;
+public:
+	void display_customer();
+	void add_customer();
+	void update_customer();
 };
 
 class supplier
@@ -96,7 +102,7 @@ class supplier
 	string email_id;
 };
 
-//Member Functions
+//Item Member Functions
 void items::add()
 {
 	cout << "Enter the name of the item : ";
@@ -193,8 +199,8 @@ string customer_cart::get_bill_id()
 void customer_cart::add_item()
 {
 	// printing your order ID is specific
-	// Loop to add items  
-	//Logic to add the item with given quantity
+	// Loop to add items  (ITEM and QTY needed) and take bill_id from the get_bill_id function
+	//Logic to add the item with given quantity 
 }
 
 void customer_cart::remove_item()
@@ -213,10 +219,69 @@ void customer_cart::payment()
 	//Add payment method for the respective Bill
 }
 
+//Customer Member Functions
+
+void customer::display_customer()
+{
+	//display customer
+	int i = 0;
+	query = "Select * from customer;";
+	q = query.c_str();
+	mysql_query(conn, q);
+	res_set = mysql_store_result(conn);
+	cout << endl;
+	while ((row = mysql_fetch_row(res_set)) != NULL)
+	{
+		cout << ++i << "  " << row[1] << " " << row[2] << endl;
+		cout << "Mobile : " << row[5] << endl;
+		cout << endl;
+	}
+
+}
+
+void customer::add_customer()
+{
+	cout << "Enter the first_name  : ";
+	cin >> first_name;
+	cout << "Enter the last_name  : ";
+	cin >> last_name;
+	cout << "Enter the email_id  : ";
+	cin >> email_id;
+	cout << "Enter the address  : ";
+	cin >> address;
+	cout << "Enter the phone_number  : ";
+	cin >> phone_number;
+	cout << "Enter the city  : ";
+	cin >> city;
+	cout << "Enter the state  : ";
+	cin >> state;
+	cout << "Enter the post_code  : ";
+	cin >> post_code;
+
+
+	stmt.str("");
+	stmt << "Insert into customer(first_name,last_name,email_id,address,phone_number,city,state,post_code,start_date) values('" << first_name << "','" << last_name << "','" << email_id << "','" << address << "'," << phone_number << ",'" << city << "','" << state << "'," << post_code << ",CURRENT_TIMESTAMP());";
+	query = stmt.str();
+	q = query.c_str();
+	mysql_query(conn, q);
+	res_set = mysql_store_result(conn);
+	if (!(res_set))
+		cout << endl << endl << "Customer Inserted Successfully" << endl << endl << endl;
+	else
+		cout << endl << endl << "ERROR while inserting the Customer!" << endl << "Contact Technical Team " << endl << endl << endl;
+
+}
+
+void customer::update_customer()
+{
+	//update customer
+}
+
 //Function declaration
 void main_menu();
 void item_menu();
 void manager_access();
+void customer_menu();
 
 //Function Definition
 // main menu
@@ -253,7 +318,7 @@ void main_menu()
 	case 3:
 		system("cls");
 		manager_access();
-		item_menu();
+		customer_menu();
 		_getch();
 		break;
 
@@ -289,10 +354,11 @@ void main_menu()
 	return;
 }
 
-// book menu
+// Item menu
 
 void item_menu()
 {
+	system("cls");
 	int c;
 	items b;
 	customer_cart car;
@@ -334,12 +400,47 @@ void item_menu()
 	return;
 }
 
+//Customer menu
+void customer_menu()
+{
+	system("cls");
+	int c;
+	customer d;
+	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
+	cout << "                  CUSTOMER MENU" << endl;
+	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
+	cout << "   1. DISPLAY ALL CUSTOMER" << endl;
+	cout << "   2. ADD CUSTOMER" << endl;
+	cout << "   3. UPDATE CUSTOMER " << endl;
+	cout << "   4. RETURN TO MAIN MENU" << endl << endl << endl;
+	cout << "Enter Your Choice : ";
+	cin >> c;
+	switch (c)
+	{
+	case 1:
+		d.display_customer();
+		break;
+	case 2:
+		d.add_customer();
+		break;
+	case 3:
+		d.update_customer();
+		break;
+	case 4:
+		return;
+		break;
+	default:
+		cout << "Wrong Input" << endl << "Invalid input";
+		break;
+	}
+	return;
+}
 // Manager Access 
 
 void manager_access()
 {
 	int num = 0;
-	cout << "Enter password : ";
+	cout << "Enter the manager password : ";
 	for (int i = 0; i < 4; i++)
 	{
 		num = num * 10 + (_getch() - 48);
