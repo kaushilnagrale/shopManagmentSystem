@@ -47,6 +47,7 @@ class customer_cart
 
 	string mobile_number;			// Primary Key
 	string item_no;
+	string payment_method;
 	long qty;
 
 public:
@@ -55,7 +56,7 @@ public:
 	void add_item(string n);
 	void remove_item();
 	void checkout(string n);
-	void payment();
+	void payment(string n);
 };
 
 class supplier_cart
@@ -240,9 +241,22 @@ void customer_cart::checkout(string n)
 	cout << row[0] << endl;	
 }
 
-void customer_cart::payment()
+void customer_cart::payment(string n)
 {
 	//Add payment method for the respective Bill
+	cout << "Enter your Payment Method" << endl;
+	cin >> payment_method;
+
+	stmt.str("");
+	stmt << "call SP_customerPayment(" << n << ",'" << payment_method << "'); ";
+	query = stmt.str();
+	q = query.c_str();
+	mysql_query(conn, q);
+	res_set = mysql_store_result(conn);
+
+	system("cls");
+	cout << "Payment done Sucessfully!";
+	
 }
 
 //Customer Member Functions
@@ -423,6 +437,7 @@ void item_menu()
 			}
 		}
 		car.checkout(bill);
+		car.payment(bill);
 
 		break;
 	case 3:
