@@ -51,7 +51,7 @@ class customer_cart
 	long qty;
 
 public:
-	void generate_bill_id();
+	void generate_bill_id(string n);
 	string get_bill_id();
 	void add_item(string n);
 	void remove_item();
@@ -165,17 +165,11 @@ void items::item_search()
 }
 
 //Customer Cart member function
-void customer_cart::generate_bill_id()
+void customer_cart::generate_bill_id(string n)
 {
-	cout << "Enter your mobile number : ";
-	cin >> mobile_number;
-	//add the SP here which initiates the cart (Initiate Stored Procedure)
-
-	//If mobile number not in existing customer then demand the customer details
-	// call add customer details from here
 
 	stmt.str("");
-	stmt << "CALL SP_initiateCustomerBill(" << mobile_number << ");";
+	stmt << "CALL SP_initiateCustomerBill(" << n << ");";
 	query = stmt.str();
 	q = query.c_str();
 	mysql_query(conn, q);
@@ -322,6 +316,8 @@ void main_menu();
 void item_menu();
 void manager_access();
 void customer_menu();
+void display_customer_purchase(string n);
+void display_supplier_purchase();
 
 //Function Definition
 // main menu
@@ -329,6 +325,7 @@ void customer_menu();
 void main_menu()
 {
 	int c;
+	string mobno;
 	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
 	cout << "         SHOP MANGEMENT SYSTEM" << endl;
 	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
@@ -351,7 +348,10 @@ void main_menu()
 
 	case 2:
 		system("cls");
-		item_menu();
+		cout << "Enter your mobile No. :  ";
+		cin >> mobno;
+		//If new number then add customer details
+		display_customer_purchase(mobno);
 		_getch();
 		break;
 
@@ -403,6 +403,7 @@ void item_menu()
 	string bill;
 	items b;
 	char s = 'y';
+	string mobile_number;
 	customer_cart car;
 	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
 	cout << "                  ITEM MENU" << endl;
@@ -420,7 +421,12 @@ void item_menu()
 		b.display();
 		break;
 	case 2:
-		car.generate_bill_id();
+		cout << "Enter your mobile number : ";
+		cin >> mobile_number;
+        //If new number then add customer 
+        //If mobile number not in existing customer then demand the customer details
+        // call add customer details from here
+		car.generate_bill_id(mobile_number);
 		bill = car.get_bill_id();
 		while (s != 'n' || s!= 'N')
 		{	
@@ -519,6 +525,23 @@ void manager_access()
 		cout << endl;
 	}
 	return;
+}
+
+void display_customer_purchase(string n) 
+{
+	int i = 0;
+	query = "SELECT * FROM bill a join customer b on a.customer_id = b.customer_id where b.phone_number = '" + n + "';";
+	q = query.c_str();
+	mysql_query(conn, q);
+	res_set = mysql_store_result(conn);
+	cout << endl;
+	while ((row = mysql_fetch_row(res_set)) != NULL)
+	{
+		cout << ++i << "  " << row[5] << endl;
+		cout << "Date : " << row[3] << endl;
+		cout << "Amount : " << row[2] << endl;
+		cout << endl;
+	}
 }
 
 
