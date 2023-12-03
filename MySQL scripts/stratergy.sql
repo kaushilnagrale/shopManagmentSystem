@@ -5,10 +5,10 @@ CALL SP_initiateCustomerBill(7777777777);
 #get the order number quickly
 set bill_identi = (select max(bill_id) as use_this_id from shop_management_system.bill);
 #add items
-call SP_addBillItems(9,1,5);
+call SP_addBillItems(32,1,5);
 call SP_addBillItems(9,2,1);
 #when finished give ask payment details
-call SP_customerPayment(9,'CASH');
+call SP_customerPayment(32,'CASH');
 
 
 

@@ -46,15 +46,15 @@ class customer_cart
 {
 
 	string mobile_number;			// Primary Key
-	string item_name;
+	string item_no;
 	long qty;
 
 public:
 	void generate_bill_id();
 	string get_bill_id();
-	void add_item();
+	void add_item(string n);
 	void remove_item();
-	void checkout();
+	void checkout(string n);
 	void payment();
 };
 
@@ -192,15 +192,29 @@ string customer_cart::get_bill_id()
 	mysql_query(conn, q);
 	res_set = mysql_store_result(conn);
 	row = mysql_fetch_row(res_set);
-	cout << row[0];
+	//cout << row[0];
+	system("cls");
+	// printing your order ID is specific
+	cout << "Your Bill ID is " << row[0] << endl;
 	return row[0];
 }
 
-void customer_cart::add_item()
+void customer_cart::add_item(string n)
 {
-	// printing your order ID is specific
-	// Loop to add items  (ITEM and QTY needed) and take bill_id from the get_bill_id function
-	//Logic to add the item with given quantity 
+
+	cout << "Add an item" << endl;
+	cin >> item_no;
+	cout << "Add Quantity" << endl;
+	cin >> qty;
+
+	stmt.str("");
+	stmt << "CALL SP_addBillItems("<< n << "," << item_no << "," << qty << ");";
+	query = stmt.str();
+	q = query.c_str();
+	mysql_query(conn, q);
+	res_set = mysql_store_result(conn);
+
+
 }
 
 void customer_cart::remove_item()
@@ -209,9 +223,21 @@ void customer_cart::remove_item()
 	//Logic to remove the item with given quantity
 }
 
-void customer_cart::checkout()
+void customer_cart::checkout(string n)
 {
 	//Finalised cart looped with SP to add items (add item Stored procedure)
+	system("cls");
+	cout << "Your Total Amount is" << endl;
+
+	stmt.str("");
+	stmt << "select sum(price*quantity) from bill_item where bill_id =" << n <<";";
+	query = stmt.str();
+	q = query.c_str();
+	mysql_query(conn, q);
+	res_set = mysql_store_result(conn);
+	cout << endl;
+	row = mysql_fetch_row(res_set);
+	cout << row[0] << endl;	
 }
 
 void customer_cart::payment()
@@ -360,7 +386,9 @@ void item_menu()
 {
 	system("cls");
 	int c;
+	string bill;
 	items b;
+	char s = 'y';
 	customer_cart car;
 	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
 	cout << "                  ITEM MENU" << endl;
@@ -379,8 +407,23 @@ void item_menu()
 		break;
 	case 2:
 		car.generate_bill_id();
-		car.get_bill_id();
-		b.item_search();
+		bill = car.get_bill_id();
+		while (s != 'n' || s!= 'N')
+		{	
+			cout << "Do you want to add item? (y/n)" << endl;
+			cin >> s;
+			if (s == 89 || s == 121) 
+			{
+				b.display();		
+				car.add_item(bill);
+			}
+			else
+			{
+				break;
+			}
+		}
+		car.checkout(bill);
+
 		break;
 	case 3:
 		manager_access();
